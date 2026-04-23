@@ -1,0 +1,36 @@
+# Environment
+.env
+.env.local
+.venv
+env/
+venv/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Node.js
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Database & Data
+*.db
+*.sqlite3
+backend/data/*.index
+backend/data/*.pkl
+postgres_data/
+
+# Logs
+*.log
+prod_backend_*.log
+
+# OS
+.DS_Store
+Thumbs.db
