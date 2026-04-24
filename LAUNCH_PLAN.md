@@ -1,50 +1,93 @@
-# 🚀 MentorNet: Master Launch Plan
+# 🚀 MentorNet: Product + Growth + Sales Launch System (V2)
 
-This document outlines the strategic roadmap for transitioning MentorNet from a hardened development state to a global production environment.
+**Status**: Market-Ready Elite | **Target**: High-Velocity Growth & Revenue
 
-## 📅 Timeline: T-Minus 24 Hours
-
-### Phase 0: Infrastructure Ignition (T-24h)
-- [ ] **Secret Injection**: Inject production `SECRET_KEY`, `FIELD_ENCRYPTION_KEY`, and `SENTRY_DSN` into the production environment.
-- [ ] **DB Initialization**: Run `python scripts/init_db.py` on the production Postgres cluster.
-- [ ] **Vector Index Warming**: Ensure the FAISS index is synced with the production DB.
-- [ ] **SSL Verification**: Confirm Let's Encrypt certificates are active for `api.mentornet.ai` and `mentornet.ai`.
-
-### Phase 1: Soft Launch (T-12h)
-- [ ] **Internal Testing**: Invite the "Alpha 100" users (internal team and stakeholders).
-- [ ] **Audit Review**: Monitor `audit.log` for any anomalies during the first 100 signups.
-- [ ] **Rate Limit Tuning**: Verify that the tiered rate limits are not blocking legitimate internal users.
-
-## 🚀 The Launch Sequence (T-0)
-
-### 1. Deployment Execution
-- [ ] **Docker Ignition**: `docker-compose -f docker-compose.prod.yml up -d --scale backend=3 --scale worker=2`
-- [ ] **Nginx Reload**: Verify load balancing is distributing traffic across all 3 replicas.
-
-### 2. Growth Engine Activation
-- [ ] **Referral Loop Live**: Enable the `ReferralSystem` for all new signups.
-- [ ] **Public Profiles Public**: Release the sitemap for mentor profiles to Google Search Console for SEO indexing.
-- [ ] **Initial Social Burst**: Post the first "Insight Sharing" card from the founder's account.
-
-## 📊 Post-Launch Monitoring (First 24 Hours)
-
-### Observability Benchmarks
-- **Error Rate**: < 0.1% (Sentry)
-- **API Latency**: < 150ms P95 (Prometheus)
-- **DB Pool Health**: < 50% utilization (Grafana)
-- **AI Task Queue**: < 2s backlog (Flower)
-
-## 🛡️ Contingency & Safety (Circuit Breakers)
-
-- **AI Failure**: If FAISS latency exceeds 500ms, the system will automatically fallback to "Simple Keyword Ranking."
-- **DB Pressure**: If Postgres CPU > 80%, Nginx will temporarily enable "Queue Mode" for non-critical requests.
-- **Security Breach**: If 10+ failed login attempts from a single IP, the IP is blacklisted in Redis for 24 hours.
-
-## 🏁 Future Milestones (Next 30 Days)
-1. **Mobile App Release**: Submit `@mentornet/mobile` to App Store/Play Store.
-2. **Stripe Integration**: Activate the premium mentor booking payments.
-3. **Enterprise Dashboard**: Launch the organization-level insights for universities.
+## 🔥 The Market Capture Engine
+MentorNet is NOT just a platform; it is an **AI-powered discovery engine** that guarantees the right mentor in seconds.
 
 ---
 
-**MentorNet is officially ready for liftoff.**
+## 🎯 1. Core Product Hooks (Conversion Psychology)
+We win by solving pain points with precision messaging.
+
+### 👤 Persona A: The Student (Growth Engine)
+- **Pain**: Career confusion and academic isolation.
+- **Hook**: "Find your exact career path in 10 minutes."
+- **CTA**: "Get Matched Free"
+
+### 👤 Persona B: Early Professionals (Retention)
+- **Pain**: Career stagnation and skill gaps.
+- **Hook**: "Get unstuck with mentors from FAANG and Unicorn startups."
+- **CTA**: "Unlock Your Next Promotion"
+
+### 👤 Persona C: The Mentor (Supply)
+- **Pain**: Knowledge stagnation and unmonetized expertise.
+- **Hook**: "Monetize your wisdom. Get booked instantly."
+- **CTA**: "Become an Elite Mentor"
+
+---
+
+## 🧠 2. Growth Infrastructure (Pre-Launch)
+
+### ✅ Scarcity & Waitlist Engine
+- **The Queue**: Implement a live "Early Access" counter.
+- **Scarcity Hook**: "Only 500 spots available for the Genesis Cohort."
+- **Viral Referral**: "Invite 2 friends to skip 50 places in the queue."
+
+### ✅ Analytics & CRM Stack
+- **Instrumentation**: Track `Signup -> AI Match -> Session Booking -> Review`.
+- **CRM (HubSpot/Brevo)**:
+    - *T-24h*: Welcome email with "Initial Career Scan."
+    - *T+12h*: "3 Mentors we found for you" auto-sequence.
+
+---
+
+## 🚀 3. The 7-Day Hyper-Growth Execution
+
+| Day | Focus | Action |
+| :--- | :--- | :--- |
+| **Day 1** | **Ignition** | Launch to personal network + Invite-only mode activation. |
+| **Day 2** | **Authority** | LinkedIn viral post: "Why we built the anti-networking platform." |
+| **Day 3** | **Distribution** | Influencer outreach (Academic & Career content creators). |
+| **Day 4** | **Supply Sprint** | Manual onboarding of 100 high-quality FAANG/IIT mentors. |
+| **Day 5** | **Optimization** | Paid ads test (₹5k budget) targeting "Career Transition" keywords. |
+| **Day 6** | **Product Polish** | Rapid dev sprint based on Day 1-3 feedback logs. |
+| **Day 7** | **The Open Gate** | Remove invite-only mode. Full public launch. |
+
+---
+
+## 💰 4. Monetization Strategy (Day 1 Revenue)
+
+### Model A: Pay-Per-Session (Transactional)
+- **Pricing**: ₹499 - ₹2,499 per session.
+- **Revenue**: 20% platform fee per booking.
+
+### Model B: MentorNet Premium (Subscription)
+- **Pricing**: ₹999/month.
+- **Features**: Unlimited AI discovery, priority booking, and "VIP Mentor" access.
+
+---
+
+## 🔄 5. Retention Engine (Stopping Churn)
+
+- **AI Follow-ups**: "You matched with Rahul (FAANG Engineer) 3 days ago. Want to book a 15-min check-in?"
+- **Weekly Insight Cards**: Generate "Top Career Insights" based on global mentor session data.
+- **Roadmap Tracking**: Visualize the user's progress from "Confused" to "Mentored" to "Hired."
+
+---
+
+## 📊 6. The "North Star" Metrics
+
+| Metric Type | Metric Name | Target |
+| :--- | :--- | :--- |
+| **Growth** | Viral Coefficient (K) | > 1.2 |
+| **Product** | Time to First Match (TTFM) | < 30 Seconds |
+| **Sales** | Match -> Booking % | > 15% |
+| **Revenue** | GMV (Gross Mentor Value) | ₹100k (Week 1) |
+
+---
+
+## 🏁 Final Truth
+**Distribution > Product.** We launch with the best tech, but we win with the best loops.
+
+**MentorNet is officially ready to capture the market.**
