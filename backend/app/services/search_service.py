@@ -16,7 +16,11 @@ def search_profiles_semantic(db: Session, query: str, current_user_id: int = Non
     results = semantic_search(query, k=limit * 3)
     profile_ids = [r["profile_id"] for r in results]
 
-    profiles = db.query(Profile).join(User).filter(
+    from sqlalchemy.orm import joinedload
+    profiles = db.query(Profile).options(
+        joinedload(Profile.tags),
+        joinedload(Profile.user)
+    ).join(User).filter(
         Profile.id.in_(profile_ids),
         User.role == UserRole.MENTOR
     ).all()

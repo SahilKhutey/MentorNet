@@ -55,6 +55,17 @@ class SocketManager:
             else:
                 print(f"Target user {target_id} offline, message saved to DB")
 
+    async def handle_booking_event(self, booking):
+        mentor_sid = self.user_to_sid.get(str(booking.mentor_id))
+        if mentor_sid:
+            await sio.emit("booking_created", {
+                "booking_id": booking.id,
+                "student_id": booking.student_id,
+                "start_time": str(booking.start_time),
+                "end_time": str(booking.end_time)
+            }, to=mentor_sid)
+            print(f"Real-time notification sent to mentor {booking.mentor_id}")
+
 socket_manager = SocketManager()
 
 # Event Handlers

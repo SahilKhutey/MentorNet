@@ -37,6 +37,23 @@ def update_user_profile(
             detail=str(e)
         )
 
+from app.models.user import User
+
+@router.get("/public/{username}")
+def get_public_profile(username: str, db: Session = Depends(get_db)):
+    """Public endpoint for sharing mentor profiles (SEO optimized)."""
+    user = db.query(User).filter(User.username == username, User.role == "mentor").first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Mentor not found")
+    
+    # In a real app, you would join with Profile and aggregate ratings here
+    return {
+        "name": user.name,
+        "username": user.username,
+        "expertise": user.profile.bio if user.profile else "Expert Mentor",
+        "avatar": f"https://api.dicebear.com/7.x/avataaars/svg?seed={user.username}"
+    }
+
 @router.get("/me", response_model=ProfileResponse)
 def get_my_profile(
     db: Session = Depends(get_db),

@@ -19,12 +19,14 @@ class Settings(BaseSettings):
         raise ValueError(v)
 
     # Database Configuration
-    DATABASE_URL: str = "sqlite:///./mentornet.db"
+    # Use PostgreSQL as the primary production-standard choice
+    DATABASE_URL: str = "postgresql://admin:password@localhost:5432/mentornet"
 
     @validator("DATABASE_URL", pre=True)
     def assemble_db_url(cls, v: str) -> str:
         if isinstance(v, str) and v:
             return v
+        # Fallback to SQLite only for local development if no env is set
         return "sqlite:///./mentornet.db"
 
     # Redis Configuration
@@ -34,9 +36,10 @@ class Settings(BaseSettings):
     FAISS_INDEX_PATH: str = "./data/faiss_index.bin"
 
     # Security Configuration
-    SECRET_KEY: str = "DEV_SECRET_KEY_REPLACE_IN_PROD" # Change in production
+    # IMPORTANT: Override SECRET_KEY in .env for production
+    SECRET_KEY: str = "your-secret-key" 
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8 # 8 days
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 # 24 hours
 
     class Config:
         case_sensitive = True

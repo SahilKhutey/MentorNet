@@ -26,4 +26,25 @@ class CacheManager:
         if not self.enabled: return
         self.redis.delete(key)
 
+    def cached(self, expire: int = 3600):
+        """Decorator to cache function results in Redis."""
+        import functools
+        def decorator(func):
+            @functools.wraps(func)
+            def wrapper(*args, **kwargs):
+                if not self.enabled:
+                    return func(*args, **kwargs)
+                
+                # Create a stable key from function name and args
+                key = f"{func.__name__}:{str(args)}:{str(kwargs)}"
+                cached_val = self.get(key)
+                if cached_val:
+                    return cached_val
+                
+                result = func(*args, **kwargs)
+                self.set(key, result, expire=expire)
+                return result
+            return wrapper
+        return decorator
+
 cache_manager = CacheManager()

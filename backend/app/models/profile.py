@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, ForeignKey, Text, JSON
 from sqlalchemy.orm import relationship
-from app.core.database import Base
+from app.db.base_class import Base
 from app.models.tag import profile_tags
 
 class Profile(Base):
