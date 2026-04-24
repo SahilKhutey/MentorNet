@@ -4,12 +4,14 @@ from sqlalchemy.sql import func
 from app.db.base_class import Base
 import uuid
 
+from app.db.types import EncryptedString
+
 class User(Base):
     __tablename__ = "users"
 
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    name = Column(String, nullable=False, default="New User")
-    email = Column(String, unique=True, index=True, nullable=False)
+    name = Column(EncryptedString, nullable=False, default="New User")
+    email = Column(EncryptedString, unique=True, index=True, nullable=False)
     username = Column(String, unique=True, index=True, nullable=True)
     password = Column(String, nullable=False)
     role = Column(String, nullable=False)

@@ -42,7 +42,10 @@ app = FastAPI(
 Instrumentator().instrument(app).expose(app)
 
 from app.core.security import rate_limit_middleware
+from app.core.audit import audit_log_middleware
+
 app.middleware("http")(rate_limit_middleware)
+app.middleware("http")(audit_log_middleware)
 
 # Configure Hardened CORS
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3001").split(",")

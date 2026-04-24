@@ -3,12 +3,14 @@ from sqlalchemy.orm import relationship
 from app.db.base_class import Base
 from app.models.tag import profile_tags
 
+from app.db.types import EncryptedString
+
 class Profile(Base):
     __tablename__ = "profiles"
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    full_name = Column(String)
+    full_name = Column(EncryptedString)
     bio = Column(String)
     location = Column(String)
     institution = Column(String)

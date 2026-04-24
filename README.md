@@ -30,13 +30,13 @@ graph TD
 - **🔐 Fortress-Grade Security**: Dual-token JWT auth, Redis-backed blacklisting, and tiered rate-limiting.
 - **📊 Full-Stack Observability**: Integrated Sentry (Errors), Prometheus (Metrics), and Grafana (Dashboards).
 
-## 🛡️ Security & Privacy (GDPR Ready)
+## 🛡️ Security & Privacy (Military-Grade)
 
-- **Stateful Auth**: Access + Refresh tokens with automatic rotation.
-- **Kill Switch**: Immediate session invalidation via Redis blacklisting.
-- **PII Protection**: Automated masking of sensitive data (emails, tokens) in logs.
-- **Data Rights**: Built-in endpoints for secure Account Purging and Data Export.
-- **Network Hardening**: Restrictive CORS, HSTS, and Content Security Policies.
+- **🔐 Field-Level Encryption (ALFE)**: Sensitive PII (Emails, Names) is encrypted using **AES-256-GCM** before storage.
+- **📜 Immutable Audit Logging**: Forensic tracking of all high-risk actions (Logins, Deletions) in a tamper-evident format.
+- **🔄 Stateful Auth**: Access + Refresh tokens with automatic rotation and Redis blacklisting.
+- **🕵️ PII Protection**: Automated masking of sensitive data in logs and multi-layer privacy controls.
+- **🌐 Network Hardening**: Restrictive CORS, HSTS, and Content Security Policies (CSP).
 
 ## 🛠️ Technology Stack
 
