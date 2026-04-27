@@ -21,17 +21,17 @@ importers:
         specifier: ^0.4.2
         version: 0.4.2
       '@mentornet/api':
-        specifier: workspace:*
+        specifier: file:../../packages/api
         version: link:../../packages/api
       '@mentornet/hooks':
-        specifier: workspace:*
-        version: link:../../packages/hooks
+        specifier: file:../../packages/hooks
+        version: file:packages/hooks(@types/react@19.2.14)(react@19.1.0)
       '@mentornet/types':
-        specifier: workspace:*
+        specifier: file:../../packages/types
         version: link:../../packages/types
       '@mentornet/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
+        specifier: file:../../packages/ui
+        version: file:packages/ui(@babel/core@7.29.0)(@types/react@19.2.14)(react-dom@19.2.4(react@19.1.0))(react@19.1.0)
       '@react-navigation/bottom-tabs':
         specifier: ^7.15.10
         version: 7.15.10(@react-navigation/native@7.2.2(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.7.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native-screens@4.24.0(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react@19.1.0)
@@ -81,16 +81,16 @@ importers:
   apps/web:
     dependencies:
       '@mentornet/api':
-        specifier: workspace:*
+        specifier: file:../../packages/api
         version: link:../../packages/api
       '@mentornet/hooks':
-        specifier: workspace:*
+        specifier: file:../../packages/hooks
         version: link:../../packages/hooks
       '@mentornet/types':
-        specifier: workspace:*
+        specifier: file:../../packages/types
         version: link:../../packages/types
       '@mentornet/ui':
-        specifier: workspace:*
+        specifier: file:../../packages/ui
         version: link:../../packages/ui
       axios:
         specifier: ^1.15.2
@@ -148,7 +148,7 @@ importers:
   packages/api:
     dependencies:
       '@mentornet/types':
-        specifier: workspace:*
+        specifier: file:../types
         version: link:../types
       axios:
         specifier: ^1.6.0
@@ -1086,6 +1086,12 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@mentornet/hooks@file:packages/hooks':
+    resolution: {directory: packages/hooks, type: directory}
+
+  '@mentornet/ui@file:packages/ui':
+    resolution: {directory: packages/ui, type: directory}
 
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
@@ -5745,6 +5751,30 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
+  '@mentornet/hooks@file:packages/hooks(@types/react@19.2.14)(react@19.1.0)':
+    dependencies:
+      zustand: 4.5.7(@types/react@19.2.14)(react@19.1.0)
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+      - react
+
+  '@mentornet/ui@file:packages/ui(@babel/core@7.29.0)(@types/react@19.2.14)(react-dom@19.2.4(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      react-native: 0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0)
+      react-native-web: 0.21.2(react-dom@19.2.4(react@19.1.0))(react@19.1.0)
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@react-native-community/cli'
+      - '@react-native/metro-config'
+      - '@types/react'
+      - bufferutil
+      - encoding
+      - react
+      - react-dom
+      - supports-color
+      - utf-8-validate
+
   '@napi-rs/wasm-runtime@0.2.12':
     dependencies:
       '@emnapi/core': 1.10.0
@@ -8876,6 +8906,11 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  react-dom@19.2.4(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      scheduler: 0.27.0
+
   react-dom@19.2.4(react@19.2.4):
     dependencies:
       react: 19.2.4
@@ -8924,6 +8959,21 @@ snapshots:
       react: 19.1.0
       react-native: 0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0)
       warn-once: 0.1.1
+
+  react-native-web@0.21.2(react-dom@19.2.4(react@19.1.0))(react@19.1.0):
+    dependencies:
+      '@babel/runtime': 7.29.2
+      '@react-native/normalize-colors': 0.74.89
+      fbjs: 3.0.5
+      inline-style-prefixer: 7.0.1
+      memoize-one: 6.0.0
+      nullthrows: 1.1.1
+      postcss-value-parser: 4.2.0
+      react: 19.1.0
+      react-dom: 19.2.4(react@19.1.0)
+      styleq: 0.1.3
+    transitivePeerDependencies:
+      - encoding
 
   react-native-web@0.21.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
