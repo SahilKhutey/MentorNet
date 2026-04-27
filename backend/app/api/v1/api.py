@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.api.v1.endpoints import (
     profile, auth, search, recommendation, 
     feedback, analytics, booking, session, chat, ops, ai_assistant, enterprise,
-    user
+    user, roadmap, resume, kb
 )
 
 api_router = APIRouter()
@@ -19,3 +19,6 @@ api_router.include_router(chat.router)
 api_router.include_router(ops.router)
 api_router.include_router(ai_assistant.router)
 api_router.include_router(enterprise.router)
+api_router.include_router(roadmap.router)
+api_router.include_router(resume.router)
+api_router.include_router(kb.router)

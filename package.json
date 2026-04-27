@@ -8,7 +8,8 @@
   "scripts": {
     "web": "npm run dev --workspace=apps/web",
     "mobile": "npm run start --workspace=apps/mobile",
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "prepare": "husky"
   },
   "devDependencies": {
     "turbo": "latest"

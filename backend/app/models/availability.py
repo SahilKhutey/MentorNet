@@ -1,5 +1,5 @@
-from sqlalchemy import Column, String, DateTime
-from app.core.database import Base
+from sqlalchemy import Column, String, DateTime, Boolean
+from app.db.base_class import Base
 import uuid
 
 class Availability(Base):
@@ -9,3 +9,4 @@ class Availability(Base):
     mentor_id = Column(String, index=True) # Linked to User.id (UUID)
     start_time = Column(DateTime, nullable=False)
     end_time = Column(DateTime, nullable=False)
+    is_booked = Column(Boolean, default=False)

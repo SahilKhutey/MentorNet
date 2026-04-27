@@ -11,3 +11,10 @@ class Booking(Base):
     start_time = Column(DateTime, nullable=False)
     end_time = Column(DateTime, nullable=False)
     status = Column(String, default="scheduled")  # scheduled | completed | cancelled
+    
+    # Session Details
+    topic = Column(String, nullable=True)
+    notes = Column(String, nullable=True)
+    
+    # Meeting Link (Mocked)
+    meeting_link = Column(String, nullable=True)

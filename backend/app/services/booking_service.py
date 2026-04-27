@@ -1,88 +1,77 @@
-from sqlalchemy.orm import Session as DBSession
+from sqlalchemy.orm import Session
 from app.models.booking import Booking
 from app.models.availability import Availability
-from app.models.session import Session
-from app.services.socket_manager import socket_manager
+from app.services.meeting_service import meeting_service
+from datetime import datetime, timedelta
 import uuid
 
-def generate_meeting_link():
-    """Generate a unique Jitsi meeting link."""
-    return f"https://meet.jit.si/mentornet-{uuid.uuid4()}"
+class BookingService:
+    @staticmethod
+    async def create_booking(db: Session, student_id: str, mentor_id: str, slot_id: str, topic: str, notes: str):
+        # Prevent self-booking exploit
+        if student_id == mentor_id:
+            raise Exception("Security Error: You cannot book a session with yourself.")
 
-def create_booking(db: DBSession, student_id: str, data):
-    """Create a new session booking after validating availability and detecting conflicts."""
-    
-    # 1. Check if mentor has a valid availability slot for this time
-    slot = db.query(Availability).filter(
-        Availability.mentor_id == data.mentor_id,
-        Availability.start_time <= data.start_time,
-        Availability.end_time >= data.end_time
-    ).first()
+        # Atomic Update to claim the slot (Prevents Race Conditions)
+        result = db.query(Availability).filter(
+            Availability.id == slot_id,
+            Availability.mentor_id == mentor_id,
+            Availability.is_booked == False,
+            Availability.start_time > datetime.now()
+        ).update({"is_booked": True}, synchronize_session=False)
 
-    if not slot:
-        raise Exception("Mentor is not available at the requested time.")
+        if result == 0:
+             raise Exception("Availability slot not found, already booked, or in the past.")
+        
+        # Now get the slot data to create the booking record
+        slot = db.query(Availability).filter(Availability.id == slot_id).first()
+        
+        # Create booking
+        booking_id = str(uuid.uuid4())
+        # Generate secure meeting link
+        meeting_link = meeting_service.generate_room_link(booking_id)
 
-    # 2. Critical Conflict Logic: Check for double bookings
-    existing = db.query(Booking).filter(
-        Booking.mentor_id == data.mentor_id,
-        Booking.status != "cancelled",
-        Booking.start_time < data.end_time,
-        Booking.end_time > data.start_time
-    ).first()
+        booking = Booking(
+            id=booking_id,
+            student_id=student_id,
+            mentor_id=mentor_id,
+            start_time=slot.start_time,
+            end_time=slot.end_time,
+            topic=topic,
+            notes=notes,
+            meeting_link=meeting_link,
+            status="confirmed"
+        )
+        db.add(booking)
+        
+        db.commit()
+        db.refresh(booking)
 
-    if existing:
-        raise Exception("Mentor already has a confirmed session at this time.")
+        # 3. Trigger Notifications (Real-time)
+        from app.services.notification_service import notification_service
+        # Use a separate background task or await here since we are in an async context
+        # Note: We need to ensure create_booking is called with 'await'
+        await notification_service.create_notification(
+            db,
+            user_id=mentor_id,
+            title="New Mentorship Booking",
+            message=f"A student has booked a session: {topic}",
+            type="booking"
+        )
+        
+        return booking
 
-    # 3. Create the Booking record
-    booking = Booking(
-        mentor_id=data.mentor_id,
-        student_id=student_id,
-        start_time=data.start_time,
-        end_time=data.end_time,
-        status="scheduled"
-    )
+    @staticmethod
+    def get_user_bookings(db: Session, user_id: str, role: str):
+        if role == "mentor":
+            return db.query(Booking).filter(Booking.mentor_id == user_id).all()
+        else:
+            return db.query(Booking).filter(Booking.student_id == user_id).all()
 
-    db.add(booking)
-    db.commit()
-    db.refresh(booking)
+    @staticmethod
+    def update_booking_status(db: Session, booking_id: str, status: str):
+        db.query(Booking).filter(Booking.id == booking_id).update({"status": status})
+        db.commit()
+        return {"status": "updated"}
 
-    # 4. 🔥 AUTO-CREATE SESSION
-    # This turns a booking into an actionable mentorship experience
-    session = Session(
-        booking_id=booking.id,
-        mentor_id=booking.mentor_id,
-        student_id=student_id,
-        start_time=booking.start_time,
-        end_time=booking.end_time,
-        meeting_link=generate_meeting_link(),
-        status="upcoming"
-    )
-    db.add(session)
-    db.commit()
-
-    # 5. Real-time Notification
-    try:
-        import asyncio
-        asyncio.create_task(socket_manager.handle_booking_event(booking))
-    except Exception as e:
-        print(f"Failed to emit socket event: {e}")
-
-    return booking
-
-def add_availability(db: Session, mentor_id: str, data):
-    """Mentor adds an availability window."""
-    slot = Availability(
-        mentor_id=mentor_id,
-        start_time=data.start_time,
-        end_time=data.end_time
-    )
-    db.add(slot)
-    db.commit()
-    db.refresh(slot)
-    return slot
-
-def get_user_bookings(db: Session, user_id: str, is_mentor: bool = False) -> List[Booking]:
-    query = db.query(Booking)
-    if is_mentor:
-        return query.filter(Booking.mentor_id == user_id).all()
-    return query.filter(Booking.student_id == user_id).all()
+booking_service = BookingService()

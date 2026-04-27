@@ -1,36 +1,40 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.core.dependencies import get_db, get_current_user
-from app.schemas.booking_schema import CreateBooking, BookingResponse, AvailabilityCreate, AvailabilityResponse
-from app.services.booking_service import create_booking, add_availability, get_user_bookings
+from app.services.booking_service import booking_service
+from app.services.availability_service import availability_service
 from typing import List
 
 router = APIRouter(prefix="/bookings", tags=["Bookings"])
 
-@router.post("/", response_model=BookingResponse)
+@router.post("/")
 def book_session(
-    data: CreateBooking,
+    data: dict, # Using dict for flexibility during rapid dev
     db: Session = Depends(get_db),
-    user_id: str = Depends(get_current_user)
+    user = Depends(get_current_user)
 ):
     try:
-        return create_booking(db, user_id, data)
+        user_id = str(user["sub"])
+        return booking_service.create_booking(
+            db, 
+            user_id, 
+            data.get("mentor_id"), 
+            data.get("slot_id"), 
+            data.get("topic"), 
+            data.get("notes")
+        )
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.post("/availability", response_model=AvailabilityResponse)
-def set_availability(
-    data: AvailabilityCreate,
-    db: Session = Depends(get_db),
-    user_id: str = Depends(get_current_user)
-):
-    # In a real app, verify user is a mentor
-    return add_availability(db, user_id, data)
+@router.get("/slots/{mentor_id}")
+def get_mentor_slots(mentor_id: str, db: Session = Depends(get_db)):
+    return availability_service.get_available_slots(db, mentor_id)
 
-@router.get("/my", response_model=List[BookingResponse])
+@router.get("/my")
 def get_my_bookings(
-    is_mentor: bool = False,
+    role: str = "student",
     db: Session = Depends(get_db),
-    user_id: str = Depends(get_current_user)
+    user = Depends(get_current_user)
 ):
-    return get_user_bookings(db, user_id, is_mentor)
+    user_id = str(user["sub"])
+    return booking_service.get_user_bookings(db, user_id, role)

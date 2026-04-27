@@ -35,7 +35,7 @@ class ProfileService:
         return str(profile.id)
 
     @staticmethod
-    def create_profile(db: Session, user_id: int, data: ProfileCreate):
+    def create_profile(db: Session, user_id: str, data: ProfileCreate):
         existing = db.query(Profile).filter(Profile.user_id == user_id).first()
         if existing:
             raise Exception("Profile already exists")
@@ -65,7 +65,7 @@ class ProfileService:
         return profile
 
     @staticmethod
-    def update_profile(db: Session, user_id: int, data: ProfileUpdate):
+    def update_profile(db: Session, user_id: str, data: ProfileUpdate):
         profile = db.query(Profile).filter(Profile.user_id == user_id).first()
         if not profile:
             raise Exception("Profile not found")
@@ -86,11 +86,11 @@ class ProfileService:
         return profile
 
     @staticmethod
-    def get_my_profile(db: Session, user_id: int):
+    def get_my_profile(db: Session, user_id: str):
         return db.query(Profile).filter(Profile.user_id == user_id).first()
 
     @staticmethod
-    def get_profile_by_user(db: Session, user_id: int):
+    def get_profile_by_user(db: Session, user_id: str):
         return db.query(Profile).filter(Profile.user_id == user_id).first()
 
     @staticmethod

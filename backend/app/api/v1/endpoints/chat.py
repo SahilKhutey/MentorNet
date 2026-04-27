@@ -7,8 +7,8 @@ router = APIRouter(prefix="/chat", tags=["Chat"])
 
 @router.get("/history/{target_id}")
 def chat_history(target_id: int, db: Session = Depends(get_db), user = Depends(get_current_user)):
-    return get_chat_history(db, int(user["sub"]), target_id)
+    return get_chat_history(db, str(user["sub"]), target_id)
 
 @router.get("/recent")
 def recent_conversations(db: Session = Depends(get_db), user = Depends(get_current_user)):
-    return get_recent_chats(db, int(user["sub"]))
+    return get_recent_chats(db, str(user["sub"]))

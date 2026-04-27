@@ -17,6 +17,7 @@ class User(Base):
     role = Column(String, nullable=False)
     referral_code = Column(String, unique=True, index=True, default=lambda: str(uuid.uuid4())[:8])
     referrer_id = Column(String, index=True, nullable=True)
+    push_token = Column(String, nullable=True) # Expo Push Token
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     profile = relationship("Profile", back_populates="user", uselist=False)

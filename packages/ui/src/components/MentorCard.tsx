@@ -9,7 +9,13 @@ interface MentorCardProps {
   onPress?: () => void;
 }
 
-export const MentorCard: React.FC<MentorCardProps> = ({ name, field, tags, score, onPress }) => {
+export const MentorCard: React.FC<MentorCardProps> = ({
+  name,
+  field,
+  tags,
+  score,
+  onPress,
+}) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.card}>
       <View style={styles.header}>
@@ -18,14 +24,16 @@ export const MentorCard: React.FC<MentorCardProps> = ({ name, field, tags, score
         </View>
         {score !== undefined && (
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{(score * 100).toFixed(0)}% Match</Text>
+            <Text style={styles.badgeText}>
+              {(score * 100).toFixed(0)}% Match
+            </Text>
           </View>
         )}
       </View>
-      
+
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.field}>{field}</Text>
-      
+
       <View style={styles.tagContainer}>
         {tags?.slice(0, 3).map((tag) => (
           <View key={tag} style={styles.tag}>

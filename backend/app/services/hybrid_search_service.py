@@ -31,9 +31,42 @@ def hybrid_search(
     profiles = db_query.all()
 
     # Step 3: Multi-factor Ranking
-    ranked = rank_profiles(profiles, semantic_results, query, db=db)
+    from app.models.availability import Availability
+    from datetime import datetime
+    
+    # Pre-fetch availability counts for the candidate pool
+    availability_map = {}
+    for p in profiles:
+        count = db.query(Availability).filter(
+            Availability.mentor_id == p.user_id,
+            Availability.start_time > datetime.utcnow()
+        ).count()
+        availability_map[p.id] = count
+
+    # Step 3: Multi-factor Ranking
+    ranked_tuples = rank_profiles(profiles, semantic_results, query, db=db)
+    
+    # Add availability boost and convert to objects for personalization
+    final_ranked = []
+    for p, score in ranked_tuples:
+        avail_count = availability_map.get(p.id, 0)
+        final_score = score
+        is_available = False
+        
+        if avail_count > 0:
+            final_score += 0.5 # Boost for being "Bookable" (normalized)
+            is_available = True
+        
+        # We keep the profile object and the new score
+        final_ranked.append((p, final_score))
 
     # Step 4: Personalization
-    personalized = personalize_results(ranked, user_id)
+    user_interests = []
+    if user_id:
+        from app.services.preference_service import PreferenceService
+        pref_service = PreferenceService(db)
+        user_interests = pref_service.get_user_interests(user_id)
+
+    personalized = personalize_results(final_ranked, user_id, user_interests)
 
     return personalized[:limit]

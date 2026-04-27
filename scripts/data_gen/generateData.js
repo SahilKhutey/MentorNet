@@ -1,5 +1,5 @@
-const { faker } = require('@faker-js/faker');
-const fs = require('fs');
+const { faker } = require("@faker-js/faker");
+const fs = require("fs");
 
 const NUM_MENTORS = 10000;
 const NUM_STUDENTS = 10000;
@@ -7,9 +7,15 @@ const NUM_STUDENTS = 10000;
 // -------------------- DATA POOLS --------------------
 
 const domains = [
-  "Software Engineering", "Data Science", "AI/ML",
-  "Product Management", "UI/UX Design",
-  "Finance", "Marketing", "Cybersecurity", "HR"
+  "Software Engineering",
+  "Data Science",
+  "AI/ML",
+  "Product Management",
+  "UI/UX Design",
+  "Finance",
+  "Marketing",
+  "Cybersecurity",
+  "HR",
 ];
 
 const skillsMap = {
@@ -18,20 +24,30 @@ const skillsMap = {
   "AI/ML": ["Deep Learning", "NLP", "Transformers", "TensorFlow"],
   "Product Management": ["Roadmaps", "Analytics", "Agile", "UX"],
   "UI/UX Design": ["Figma", "Wireframing", "User Research"],
-  "Finance": ["Stocks", "Valuation", "Excel"],
-  "Marketing": ["SEO", "Content", "Ads"],
-  "Cybersecurity": ["Ethical Hacking", "Network Security"],
-  "HR": ["Recruitment", "Soft Skills"]
+  Finance: ["Stocks", "Valuation", "Excel"],
+  Marketing: ["SEO", "Content", "Ads"],
+  Cybersecurity: ["Ethical Hacking", "Network Security"],
+  HR: ["Recruitment", "Soft Skills"],
 };
 
 const companies = [
-  "Google", "Amazon", "Microsoft", "Flipkart",
-  "Zomato", "Infosys", "TCS", "Startup"
+  "Google",
+  "Amazon",
+  "Microsoft",
+  "Flipkart",
+  "Zomato",
+  "Infosys",
+  "TCS",
+  "Startup",
 ];
 
 const education = [
-  "B.Tech IIT", "M.Tech IIT", "MBA IIM",
-  "B.Des NID", "B.Tech NIT", "Self-Taught"
+  "B.Tech IIT",
+  "M.Tech IIT",
+  "MBA IIM",
+  "B.Des NID",
+  "B.Tech NIT",
+  "Self-Taught",
 ];
 
 const availabilityOptions = ["Weekends", "Evenings", "Flexible"];
@@ -45,7 +61,10 @@ function getRandom(arr) {
 }
 
 function getSkills(domain) {
-  return skillsMap[domain].sort(() => 0.5 - Math.random()).slice(0, 3).join("|"); // Using pipe to avoid CSV confusion
+  return skillsMap[domain]
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 3)
+    .join("|"); // Using pipe to avoid CSV confusion
 }
 
 // -------------------- GENERATORS --------------------
@@ -73,7 +92,7 @@ function generateMentor(id) {
     bio: faker.lorem.sentence(),
     linkedin: `https://linkedin.com/in/${faker.internet.username()}`,
     verified: Math.random() > 0.3,
-    profile_image: `https://i.pravatar.cc/150?img=${id % 70}`
+    profile_image: `https://i.pravatar.cc/150?img=${id % 70}`,
   };
 }
 
@@ -97,7 +116,7 @@ function generateStudent(id) {
     budget_per_hour: faker.number.int({ min: 5, max: 50 }),
     languages: getRandom(languagesList),
     linkedin: `https://linkedin.com/in/${faker.internet.username()}`,
-    profile_image: `https://i.pravatar.cc/150?img=${(id + 30) % 70}`
+    profile_image: `https://i.pravatar.cc/150?img=${(id + 30) % 70}`,
   };
 }
 
@@ -105,8 +124,8 @@ function generateStudent(id) {
 
 function toCSV(data) {
   const headers = Object.keys(data[0]);
-  const rows = data.map(obj =>
-    headers.map(h => `"${String(obj[h]).replace(/"/g, '""')}"`).join(",")
+  const rows = data.map((obj) =>
+    headers.map((h) => `"${String(obj[h]).replace(/"/g, '""')}"`).join(","),
   );
   return [headers.join(","), ...rows].join("\n");
 }
@@ -115,12 +134,12 @@ function toCSV(data) {
 
 console.log("Generating mentors...");
 const mentors = Array.from({ length: NUM_MENTORS }, (_, i) =>
-  generateMentor(i + 1)
+  generateMentor(i + 1),
 );
 
 console.log("Generating students...");
 const students = Array.from({ length: NUM_STUDENTS }, (_, i) =>
-  generateStudent(i + 1)
+  generateStudent(i + 1),
 );
 
 // -------------------- SAVE FILES --------------------

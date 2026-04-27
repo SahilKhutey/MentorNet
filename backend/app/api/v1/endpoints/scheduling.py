@@ -21,7 +21,7 @@ def add_availability(
     Mentor endpoint to define open time slots for bookings.
     """
     try:
-        set_availability(db, int(user["sub"]), slots)
+        set_availability(db, str(user["sub"]), slots)
         return {"status": "availability slots added"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -45,7 +45,7 @@ def book(
     Student endpoint to book a specific mentor slot.
     """
     try:
-        booking = book_slot(db, int(user["sub"]), mentor_id, start, end)
+        booking = book_slot(db, str(user["sub"]), mentor_id, start, end)
         return {"booking_id": booking.id, "status": booking.status}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

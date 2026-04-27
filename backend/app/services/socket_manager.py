@@ -55,6 +55,13 @@ class SocketManager:
             else:
                 print(f"Target user {target_id} offline, message saved to DB")
 
+    async def notify_user(self, user_id: str, data: Dict[str, Any]):
+        sid = self.user_to_sid.get(user_id)
+        if sid:
+            await sio.emit("new_notification", data, to=sid)
+            return True
+        return False
+
     async def handle_booking_event(self, booking):
         mentor_sid = self.user_to_sid.get(str(booking.mentor_id))
         if mentor_sid:

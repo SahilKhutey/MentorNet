@@ -3,7 +3,7 @@ from app.models.enterprise import AuditLog
 from fastapi import Request
 import json
 
-def log_action(db: Session, user_id: int, action: str, details: dict = None, request: Request = None):
+def log_action(db: Session, user_id: str, action: str, details: dict = None, request: Request = None):
     """
     Production-grade audit logger for enterprise compliance.
     """

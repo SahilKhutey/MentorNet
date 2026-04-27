@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install Dependencies
         run: npm install
@@ -29,8 +29,8 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          python-version: "3.11"
+          cache: "pip"
 
       - name: Install Backend Dependencies
         run: |
@@ -55,7 +55,7 @@ jobs:
         run: |
           docker build -t mentornet-backend ./backend
           docker build -t mentornet-web ./apps/web
-          
+
           # Tagging (using placeholders if secrets aren't set yet)
           USERNAME=${{ secrets.DOCKER_USERNAME || 'mentornet' }}
           docker tag mentornet-backend $USERNAME/mentornet-backend:latest

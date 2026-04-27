@@ -3,7 +3,7 @@ from app.models.profile import Profile
 from app.ai.search_engine import semantic_search
 from app.ai.explainability import generate_match_explanation
 
-def search_profiles_semantic(db: Session, query: str, current_user_id: int = None, limit: int = 10):
+def search_profiles_semantic(db: Session, query: str, current_user_id: str = None, limit: int = 10):
     from app.models.user import User
     from app.core.constants import UserRole
     

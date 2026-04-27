@@ -3,7 +3,7 @@ from app.models.recommendation import Recommendation
 from app.ai.recommendation_engine import generate_recommendations
 from app.ai.personalization import format_results
 
-def update_user_recommendations(db: Session, user_id: int):
+def update_user_recommendations(db: Session, user_id: str):
     """
     Computes fresh recommendations and persists them to the cache table.
     This can be triggered by profile updates or background jobs.
@@ -40,7 +40,7 @@ def update_user_recommendations(db: Session, user_id: int):
 
 from app.core.cache import cache_manager
 
-def get_dashboard_feed(db: Session, user_id: int):
+def get_dashboard_feed(db: Session, user_id: str):
     """
     Fetches the highest-ranked cached recommendations for the user dashboard.
     """

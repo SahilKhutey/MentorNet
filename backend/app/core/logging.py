@@ -10,9 +10,13 @@ class JsonFormatter(logging.Formatter):
         # Basic record
         message = record.getMessage()
         
-        # Mask sensitive info in the message string
+        # Mask sensitive info in the message string using advanced PII detector
+        from app.core.privacy import PrivacyEnforcer
+        message = PrivacyEnforcer.mask_pii(message)
+        
+        # Secondary check for specific sensitive field keywords
         for field in SENSITIVE_FIELDS:
-            if field in message.lower():
+            if field in message.lower() and "[MASKED" not in message:
                 message = f"[MASKED DATA] containing {field}"
 
         log_record = {

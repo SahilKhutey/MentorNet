@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -34,6 +34,8 @@ services:
       - DATABASE_URL=postgresql://mentornet_user:mentornet_password@db:5432/mentornet_prod
       - REDIS_URL=redis://redis:6379/0
       - SENTRY_DSN=${SENTRY_DSN}
+    ports:
+      - "8000:8000"
     deploy:
       replicas: 2
 
@@ -70,6 +72,18 @@ services:
       - "3001:3000"
     depends_on:
       - prometheus
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:

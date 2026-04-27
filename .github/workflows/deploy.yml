@@ -20,12 +20,12 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/ubuntu/mentornet
-            
+
             # Pull latest images from registry
             docker-compose pull
-            
+
             # Restart services with new images
             docker-compose up -d --remove-orphans
-            
+
             # Cleanup old images
             docker image prune -f

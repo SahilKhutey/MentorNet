@@ -51,17 +51,20 @@ graph TD
 Ensure you have [Docker](https://www.docker.com/) installed.
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/SahilKhutey/MentorNet.git
    cd MentorNet
    ```
 
 2. **Configure Environment:**
+
    ```bash
    cp .env.example .env # Add your SENTRY_DSN here
    ```
 
 3. **Ignition:**
+
    ```bash
    docker-compose up -d --build
    ```
@@ -74,6 +77,7 @@ Ensure you have [Docker](https://www.docker.com/) installed.
 ## 📊 Monitoring & Logs
 
 MentorNet utilizes a structured JSON logging format ready for **Loki/ELK** ingestion.
+
 - **Metrics**: Scraped every 15s by Prometheus.
 - **Errors**: Captured instantly by Sentry.
 

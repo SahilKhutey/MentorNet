@@ -2,14 +2,15 @@ from sqlalchemy import Column, String, Integer, ForeignKey, Text, JSON
 from sqlalchemy.orm import relationship
 from app.db.base_class import Base
 from app.models.tag import profile_tags
+import uuid
 
 from app.db.types import EncryptedString
 
 class Profile(Base):
     __tablename__ = "profiles"
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String, ForeignKey("users.id"))
     full_name = Column(EncryptedString)
     bio = Column(String)
     location = Column(String)
@@ -29,7 +30,7 @@ class Profile(Base):
 class Experience(Base):
     __tablename__ = "experience"
     id = Column(Integer, primary_key=True, index=True)
-    profile_id = Column(Integer, ForeignKey("profiles.id"))
+    profile_id = Column(String, ForeignKey("profiles.id"))
     title = Column(String)
     institution = Column(String)
     start_date = Column(String)
@@ -41,7 +42,7 @@ class Experience(Base):
 class Publication(Base):
     __tablename__ = "publications"
     id = Column(Integer, primary_key=True, index=True)
-    profile_id = Column(Integer, ForeignKey("profiles.id"))
+    profile_id = Column(String, ForeignKey("profiles.id"))
     title = Column(String)
     journal = Column(String)
     year = Column(Integer)

@@ -8,11 +8,18 @@ def signup_user(db: Session, data):
     if existing:
         raise Exception("User already exists")
     
+    referrer_id = None
+    if hasattr(data, "referral_code") and data.referral_code:
+        referrer = db.query(User).filter(User.referral_code == data.referral_code).first()
+        if referrer:
+            referrer_id = referrer.id
+
     user = User(
         name=data.name,
         email=data.email,
         password=hash_password(data.password),
-        role=data.role
+        role=data.role,
+        referrer_id=referrer_id
     )
     db.add(user)
     db.commit()

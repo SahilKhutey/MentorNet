@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr, constr, field_validator
+from typing import Optional
 import re
 
 class SignupRequest(BaseModel):
@@ -6,6 +7,7 @@ class SignupRequest(BaseModel):
     email: EmailStr
     password: constr(min_length=8)
     role: constr(pattern="^(mentor|student)$")
+    referral_code: Optional[str] = None
 
     @field_validator('name')
     @classmethod

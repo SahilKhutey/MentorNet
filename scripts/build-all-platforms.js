@@ -1,16 +1,28 @@
-const { execSync } = require('child_process');
+const { execSync } = require("child_process");
 
 console.log("🛠️ Starting Multi-Platform Build for MentorNet AI...");
 
 const targets = [
   { name: "Web (Production)", cmd: "npm run build --workspace=apps/web" },
-  { name: "Android (EAS)", cmd: "cd apps/mobile && eas build --platform android --profile production --non-interactive" },
-  { name: "iOS (EAS)", cmd: "cd apps/mobile && eas build --platform ios --profile production --non-interactive" },
-  { name: "Windows (MSIX)", cmd: "cd apps/mobile && npx react-native run-windows --release" },
-  { name: "macOS (DMG/App)", cmd: "cd apps/mobile && npx react-native run-macos --release" }
+  {
+    name: "Android (EAS)",
+    cmd: "cd apps/mobile && eas build --platform android --profile production --non-interactive",
+  },
+  {
+    name: "iOS (EAS)",
+    cmd: "cd apps/mobile && eas build --platform ios --profile production --non-interactive",
+  },
+  {
+    name: "Windows (MSIX)",
+    cmd: "cd apps/mobile && npx react-native run-windows --release",
+  },
+  {
+    name: "macOS (DMG/App)",
+    cmd: "cd apps/mobile && npx react-native run-macos --release",
+  },
 ];
 
-targets.forEach(target => {
+targets.forEach((target) => {
   try {
     console.log(`\n🚀 Triggering ${target.name}...`);
     // execSync(target.cmd, { stdio: 'inherit' }); // Uncomment to actually run
@@ -20,4 +32,6 @@ targets.forEach(target => {
   }
 });
 
-console.log("\n🏁 All platform builds triggered. Check EAS and Partner Center for progress.");
+console.log(
+  "\n🏁 All platform builds triggered. Check EAS and Partner Center for progress.",
+);

@@ -15,4 +15,8 @@ class Mentor(Base):
     open_to_collaboration = Column(Boolean, default=True)
     availability_slots = Column(JSON) # Specific time slots
     
+    # Financials
+    hourly_rate = Column(Integer, default=0) # In cents/smallest unit
+    currency = Column(String, default="USD")
+    
     user = relationship("User", backref="mentor_profile")

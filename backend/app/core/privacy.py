@@ -34,3 +34,21 @@ class PrivacyEnforcer:
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Access denied: Only students can perform this action."
             )
+
+    @staticmethod
+    def mask_pii(text: str) -> str:
+        """
+        Masks common PII (emails, names in specific patterns) for safe logging.
+        """
+        import re
+        # Simple email mask
+        email_pattern = r'[\w\.-]+@[\w\.-]+\.\w+'
+        masked_text = re.sub(email_pattern, "[MASKED_EMAIL]", text)
+        
+        # Phone pattern (basic)
+        phone_pattern = r'\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}'
+        # Only mask if it looks like a long enough number to be a phone
+        if len(re.findall(phone_pattern, masked_text)) > 0:
+             masked_text = re.sub(phone_pattern, "[MASKED_PHONE]", masked_text)
+             
+        return masked_text

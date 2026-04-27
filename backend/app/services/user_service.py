@@ -34,19 +34,6 @@ def get_user_data_export(db: Session, user_id: str):
     """
     Retrieve all user data for portability (GDPR).
     """
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        return None
-        
-    return {
-        "user": {
-            "name": user.name,
-            "email": user.email,
-            "role": user.role,
-            "created_at": str(user.created_at)
-        },
-        "profile": {
-            "bio": user.profile.bio if user.profile else None,
-            "field": user.profile.primary_field if user.profile else None
-        }
-    }
+    from app.services.export_service import export_service
+    # We expect user_id to be a string from the token (sub claim)
+    return export_service.generate_user_data_export(db, str(user_id))

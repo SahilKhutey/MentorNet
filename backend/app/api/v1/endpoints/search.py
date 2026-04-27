@@ -14,7 +14,7 @@ def semantic_search_api(
     db: Session = Depends(get_db),
     user = Depends(get_current_user)
 ):
-    results = search_profiles_semantic(db, q, int(user["sub"]), limit)
+    results = search_profiles_semantic(db, q, str(user["sub"]), limit)
     return results
 
 @router.get("/hybrid")
@@ -29,7 +29,7 @@ def hybrid_search_api(
     results = hybrid_search(
         db=db,
         query=q,
-        user_id=int(user["sub"]),
+        user_id=str(user["sub"]),
         field=field,
         tags=tags,
         limit=limit

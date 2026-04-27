@@ -20,3 +20,19 @@ def purge_my_account(db: Session = Depends(get_db), user_id: str = Depends(get_c
     if not success:
         raise HTTPException(status_code=400, detail="Failed to purge account data")
     return {"message": "Account and all associated data have been permanently deleted."}
+from pydantic import BaseModel
+from app.models.user import User
+
+class PushTokenUpdate(BaseModel):
+    push_token: str
+
+@router.patch("/me/push-token")
+def update_push_token(
+    data: PushTokenUpdate,
+    db: Session = Depends(get_db),
+    user = Depends(get_current_user)
+):
+    """Update the Expo push token for the current user."""
+    db.query(User).filter(User.id == str(user["sub"])).update({"push_token": data.push_token})
+    db.commit()
+    return {"status": "updated"}
