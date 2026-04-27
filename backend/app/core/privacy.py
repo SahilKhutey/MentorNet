@@ -36,6 +36,30 @@ class PrivacyEnforcer:
             )
 
     @staticmethod
+    def anonymize_user_data(db: Session, user_id: str):
+        """
+        Anonymizes user data for 'Right to be Forgotten' requests.
+        Preserves research nodes (roadmaps, sessions) but removes all PII.
+        """
+        from app.models.profile import Profile
+        from app.models.user import User
+        
+        user = db.query(User).filter(User.id == user_id).first()
+        profile = db.query(Profile).filter(Profile.user_id == user_id).first()
+        
+        if user:
+            user.email = f"deleted_{user_id}@mentornet.ai"
+            user.hashed_password = "DELETED"
+            user.name = "Anonymous Researcher"
+            
+        if profile:
+            profile.full_name = "Anonymous Researcher"
+            profile.headline = "Record Anonymized"
+            profile.bio = "This user has exercised their right to be forgotten."
+            
+        db.commit()
+
+    @staticmethod
     def mask_pii(text: str) -> str:
         """
         Masks common PII (emails, names in specific patterns) for safe logging.

@@ -1,26 +1,27 @@
 from typing import List, Dict, Any
-import random
+from sqlalchemy.orm import Session
+from app.ai.embedding import generate_embedding
+from app.ai.vector_db.index_manager import faiss_store
+from app.models.profile import Profile
+from app.models.user import User
+from app.core.constants import UserRole
+from app.services.llm_service import llm_service
+from app.services.hybrid_search_service import hybrid_search
 
 class AIAssistantService:
-    @staticmethod
-    def get_response(query: str, user_context: Dict[str, Any]) -> str:
+    def get_response(self, query: str, user_context: Dict[str, Any], db: Session) -> str:
         """
-        Generates an AI response based on the research query and user context.
+        Generates an AI response based on the research query, user context, and RAG retrieval.
         """
-        # In production, this would call a real LLM (e.g., GPT-4, Claude)
-        # For now, we'll provide high-quality "Elite" responses based on keywords
+        # Step 1: Use Hybrid Search for personalized, ranked candidates
+        user_id = user_context.get("user_id")
+        ranked_results = hybrid_search(db, query, user_id=user_id, limit=5)
         
-        query_lower = query.lower()
+        # Step 2: Extract profiles (hybrid_search returns list of Profile objects or (Profile, score) tuples)
+        # Assuming hybrid_search returns [(Profile, score), ...] as per its definition
+        mentors = [p for p, score in ranked_results]
         
-        if "phd" in query_lower or "research" in query_lower:
-            return "Based on your interest in advanced research, I recommend focusing on building a citation network early. Would you like me to find mentors at Stanford or MIT who specialize in your field?"
-        
-        if "career" in query_lower or "job" in query_lower:
-            return "For a smooth transition into industry, optimizing your research profile for high-impact keywords is crucial. I've detected some optimization opportunities in your current resume. Shall we apply them?"
-        
-        if "connect" in query_lower or "mentor" in query_lower:
-            return "I've analyzed the current mentor pool. There are 3 'Elite' mentors who match your research velocity. I can draft a personalized outreach message for you."
-
-        return f"That's a fascinating area of inquiry. To give you the best guidance, I'm analyzing your current progress. Have you considered looking into {random.choice(['Graph Neural Networks', 'Distributed Systems', 'Quantum Computing'])} for your next paper?"
+        # Step 4: Synthesize response via LLM service
+        return llm_service.generate_response(query, user_context, mentors)
 
 ai_assistant_service = AIAssistantService()

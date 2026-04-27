@@ -30,7 +30,7 @@ def ask_assistant(
         "field": profile.primary_field if profile else "Academic"
     }
     
-    response = ai_assistant_service.get_response(data.query, context)
+    response = ai_assistant_service.get_response(data.query, context, db)
     return {"response": response}
 
 @router.get("/draft-request/{mentor_id}")

@@ -27,8 +27,8 @@ setup_logging()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Load FAISS index
-    print(f"FAISS index loaded: {len(faiss_store.id_map)} vectors")
+    # Startup: Load FAISS index (DISABLED FOR MEMORY CONSTRAINTS)
+    # print(f"FAISS index loaded: {len(faiss_store.id_map)} vectors")
     yield
 
 app = FastAPI(

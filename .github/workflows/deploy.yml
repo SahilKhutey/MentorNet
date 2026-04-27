@@ -1,8 +1,8 @@
-name: MentorNet Deploy
+name: MentorNet Auto-Deploy
 
 on:
   workflow_run:
-    workflows: ["MentorNet CI"]
+    workflows: ["MentorNet Production Pipeline"]
     types:
       - completed
 
@@ -12,20 +12,23 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: SSH into server and deploy
+      - name: SSH into production server and synchronize
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.SERVER_IP }}
-          username: ubuntu
+          username: ${{ secrets.SERVER_USER || 'ubuntu' }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/ubuntu/mentornet
-
-            # Pull latest images from registry
-            docker-compose pull
-
-            # Restart services with new images
-            docker-compose up -d --remove-orphans
-
-            # Cleanup old images
+            cd /home/${{ secrets.SERVER_USER || 'ubuntu' }}/mentornet
+            
+            # Login to registry
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            
+            # Pull latest images
+            docker-compose -f docker-compose.prod.yml pull
+            
+            # Atomic restart
+            docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+            
+            # Purge dangling images
             docker image prune -f

@@ -22,6 +22,24 @@ export interface Tag {
   name: string;
 }
 
+export interface AIInsight {
+  id: string;
+  title: string;
+  text: string;
+  summary?: string;
+  type: "recommendation" | "optimization" | "warning";
+  confidence: number;
+}
+
+export interface DashboardMentor {
+  id: string;
+  name: string;
+  field: string;
+  tags: string[];
+  score: number;
+  why: string;
+}
+
 export interface Lab {
   id: string;
   name: string;

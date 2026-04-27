@@ -70,8 +70,19 @@ class BookingService:
 
     @staticmethod
     def update_booking_status(db: Session, booking_id: str, status: str):
-        db.query(Booking).filter(Booking.id == booking_id).update({"status": status})
+        booking = db.query(Booking).filter(Booking.id == booking_id).first()
+        if not booking:
+            return {"status": "error", "message": "Booking not found"}
+            
+        booking.status = status
         db.commit()
-        return {"status": "updated"}
+
+        # If completed, check for badges (for both mentor and student eventually)
+        if status == "completed":
+            from app.services.badge_service import badge_service
+            # In a real app, you might want to do this in a background task
+            badge_service.check_and_award_badges(db, booking.mentor_id)
+            
+        return {"status": "updated", "new_status": status}
 
 booking_service = BookingService()
